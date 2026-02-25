@@ -20,8 +20,7 @@ class FinancialService {
         toCurrency: CurrencyCode
     ): CurrencyAmount {
         val rate = getExchangeRate(fromCurrency, toCurrency)
-        val convertedAmount = amount.amount * rate
-        return CurrencyAmount(convertedAmount)
+        return CurrencyAmount(amount.amount * rate)
     }
 
     private fun getExchangeRate(
@@ -29,14 +28,24 @@ class FinancialService {
         toCurrency: CurrencyCode
     ): Double {
         return when {
-            fromCurrency.code == "USD" &&
-                    toCurrency.code == "EUR" -> 0.93
+            fromCurrency.code == USD &&
+                    toCurrency.code == EUR -> USD_TO_EUR_RATE
 
-            fromCurrency.code == "USD" &&
-                    toCurrency.code == "GBP" -> 0.82
+            fromCurrency.code == USD &&
+                    toCurrency.code == GBP -> USD_TO_GBP_RATE
 
-            else -> 1.0
+            else -> DEFAULT_RATE
         }
+    }
+
+    private companion object {
+        const val USD = "USD"
+        const val EUR = "EUR"
+        const val GBP = "GBP"
+
+        const val USD_TO_EUR_RATE = 0.93
+        const val USD_TO_GBP_RATE = 0.82
+        const val DEFAULT_RATE = 1.0
     }
 }
 
@@ -75,4 +84,5 @@ value class TransactionId(val id: String) {
         }
     }
 }
+
 
